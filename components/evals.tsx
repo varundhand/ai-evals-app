@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
@@ -5,10 +7,21 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { JSX, SVGProps } from "react"
+import { useState,useRef } from "react"
 
 export function Evals() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedFiles(Array.from(event.target.files || []));
+  };
+  
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  console.log(selectedFiles)
+
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
+
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
         <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-[60px] items-center border-b px-4">
@@ -125,9 +138,47 @@ export function Evals() {
           </DropdownMenu>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+          {/* Image Upload */}
+          <div className="flex flex-col items-center justify-center">
+          <div
+              className="border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <div className="flex flex-col items-center justify-center">
+                <svg
+                  className="h-12 w-12 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                  />
+                </svg>
+                <p className="mt-4 text-sm text-gray-500">
+                  Drag and drop images here, or click to select files
+                </p>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  className="mt-4 hidden"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                />
+              </div>
+            </div>
+          </div>
+        </main>
         </main>
       </div>
+
+      
     </div>
   )
 }
