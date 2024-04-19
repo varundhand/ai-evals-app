@@ -26,6 +26,8 @@ export function Evals() {
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex < selectedFiles.length - 1 ? prevIndex + 1 : 0));
   };
+
+
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
@@ -147,74 +149,144 @@ export function Evals() {
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           {/* Image Upload */}
           <div className="flex flex-col items-center justify-center">
-          <div
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <div className="flex flex-col items-center justify-center">
-                <svg
-                  className="h-12 w-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                  />
-                </svg>
-                <p className="mt-4 text-sm text-gray-500">
-                  Drag and drop images here, or click to select files
-                </p>
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  className="mt-4 hidden"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-          </div>
+    <div
+      className="border-2 border-dashed border-gray-300 rounded-lg p-8 cursor-pointer"
+      onClick={() => fileInputRef.current?.click()}
+    >
+      <div className="flex flex-col items-center justify-center">
+        <svg
+          className="h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+          />
+        </svg>
+        <p className="mt-4 text-sm text-gray-500">
+          Drag and drop images here, or click to select files
+        </p>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          className="mt-4 hidden"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+      </div>
+    </div>
+  </div>
+          
+          {/* Data Form */}
+        <div className="flex flex-1">       
+          {/* </main> */}
+          {/* Image Preview */}
+          <div className="flex items-center justify-center mt-4 border border-gray-300 rounded-lg">
+  {/* Previous button */}
+  <button onClick={handlePrevious} className="mr-4">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+    </button>
+    <div className="border border-gray-300 rounded-lg p-4 max-w-[400px] overflow-hidden">
+    {/* Render image if there are selected files, otherwise render placeholder */}
+    {selectedFiles.length > 0 ? (
+      <img src={URL.createObjectURL(selectedFiles[currentIndex])} alt="Uploaded" className="max-w-full h-auto" />
+    ) : (
+      <div className="flex flex-col items-center justify-center">
+        <svg
+          className="h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+          />
+        </svg>
+        <p className="mt-4 text-sm text-gray-500">
+          Drag and drop images here, or click to select files
+        </p>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          className="mt-4 hidden"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+      </div>
+    )}
+  </div>
+    {/* Next button */}
+    <button onClick={handleNext} className="ml-4">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+  </div>
+  <form className="flex-1 p-4 bg-black shadow-lg rounded-lg">
+  <div className="flex flex-col gap-4">
+    {/* Rating Field */}
+    <div className="flex items-center gap-4">
+      <label className="w-20 text-white font-semibold">Rating:</label>
+      <input
+        type="number"
+        min="1"
+        max="5"
+        step="1"
+        className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
+        placeholder="Enter rating"
+      />
+    </div>
+
+    {/* Review Field */}
+    <div className="flex items-center gap-4">
+      <label className="w-20 text-white font-semibold">Review:</label>
+      <textarea
+        className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
+        rows={4}
+        placeholder="Enter review"
+      ></textarea>
+    </div>
+
+    {/* Amenities Field */}
+    <div className="flex items-center gap-4">
+      <label className="w-20 text-white font-semibold">Amenities:</label>
+      <input
+        type="text"
+        className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
+        placeholder="Enter amenities"
+      />
+    </div>
+  </div>
+</form>
+
+
+        </div>
         </main>
-        {/* </main> */}
-        {/* Image Preview */}
-        {selectedFiles.length > 0 && (
-            <div className="flex items-center justify-center mt-4">
-              {/* Previous button */}
-              <button onClick={handlePrevious} className="mr-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              {/* Image */}
-              <img src={URL.createObjectURL(selectedFiles[currentIndex])} alt="Uploaded" className="max-w-full h-auto" />
-
-              {/* Next button */}
-              <button onClick={handleNext} className="ml-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          )}
       </div>
 
       
