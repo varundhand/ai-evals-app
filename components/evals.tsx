@@ -11,17 +11,23 @@ import { useState,useRef } from "react"
 
 export function Evals() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(Array.from(event.target.files || []));
+    setCurrentIndex(0); // Reset to first image when new images are selected
   };
-  
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  console.log(selectedFiles)
 
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : selectedFiles.length - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex < selectedFiles.length - 1 ? prevIndex + 1 : 0));
+  };
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
-
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
         <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-[60px] items-center border-b px-4">
@@ -137,7 +143,7 @@ export function Evals() {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        {/* <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6"> */}
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           {/* Image Upload */}
           <div className="flex flex-col items-center justify-center">
@@ -175,7 +181,40 @@ export function Evals() {
             </div>
           </div>
         </main>
-        </main>
+        {/* </main> */}
+        {/* Image Preview */}
+        {selectedFiles.length > 0 && (
+            <div className="flex items-center justify-center mt-4">
+              {/* Previous button */}
+              <button onClick={handlePrevious} className="mr-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Image */}
+              <img src={URL.createObjectURL(selectedFiles[currentIndex])} alt="Uploaded" className="max-w-full h-auto" />
+
+              {/* Next button */}
+              <button onClick={handleNext} className="ml-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          )}
       </div>
 
       
