@@ -6,6 +6,7 @@ import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, Dropdown
 import React from "react"
 import Image from "next/image"
 import logo from '../../public/company-logo.png'
+import placeholderLogo from '../../public/placeholder-user.jpg'
 
 
 export default function ChatLayout({children} : {children:React.ReactNode}) {
@@ -105,11 +106,11 @@ export default function ChatLayout({children} : {children:React.ReactNode}) {
                 size="icon"
                 variant="ghost"
               >
-                <img
+                <Image
                   alt="Avatar"
                   className="rounded-full"
                   height="32"
-                  src="/placeholder.svg"
+                  src={placeholderLogo}
                   style={{
                     aspectRatio: "32/32",
                     objectFit: "cover",

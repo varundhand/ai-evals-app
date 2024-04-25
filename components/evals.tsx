@@ -7,17 +7,69 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { JSX, SVGProps } from "react"
-import { useState,useRef } from "react"
+import { useState,useRef,useEffect} from "react"
+import * as GaugeChart from 'gauge-chart';
+
 
 export function Evals() {
+  // const GaugeChart = require('gauge-chart')
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [rating, setRating] = useState<number>(60 );
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  let element = document.querySelector('#gaugeArea')
+
+    // Properties of the gauge
+    let gaugeOptions = {
+      hasNeedle: true,
+      needleColor: 'gray',
+      needleUpdateSpeed: 1000,
+      arcColors: ['rgb(44, 151, 222)', 'lightgray'],
+      arcDelimiters: [30],
+      rangeLabel: ['0', '100'],
+      centralLabel: '50',
+    }
+
+    // Drawing and updating the chart
+    GaugeChart.gaugeChart(element, 300, gaugeOptions).updateNeedle(50)
+
+  
+    useEffect(() => {
+      // Check if the chartRef exists and if we're on the client side
+      if (chartRef.current && typeof document !== 'undefined') {
+        // Properties of the gauge
+        const gaugeOptions = {
+          hasNeedle: true,
+          needleColor: 'gray',
+          needleUpdateSpeed: 1000,
+          arcColors: ['rgb(44, 151, 222)', 'lightgray'],
+          arcDelimiters: [60],
+          rangeLabel: ['0', '100'],
+          centralLabel: `${rating}`, // Update the central label with the current rating value
+          // centralLabel: 60, // Update the central label with the current rating value
+        };
+  
+        // Drawing and updating the chart
+        const chart = GaugeChart.gaugeChart(chartRef.current, 300, gaugeOptions);
+  
+        // Update the needle whenever the rating changes
+        chart.updateNeedle(rating);
+      }
+    }, [rating]); // Run this effect whenever the rating changes
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(Array.from(event.target.files || []));
     setCurrentIndex(0); // Reset to first image when new images are selected
   };
+
+  // Handle rating input change
+  const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(event.target.value);
+    setRating(value);
+  };
+
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : selectedFiles.length - 1));
@@ -247,9 +299,13 @@ export function Evals() {
     </svg>
   </button>
   </div>
-  <form className="flex-1 p-4 bg-black shadow-lg rounded-lg">
+  <form className="flex-1 pl-10 p-4 bg-black shadow-lg rounded-lg">
   <div className="flex flex-col gap-4">
     {/* Rating Field */}
+    <div className="" ref={chartRef}></div> {/* This is where the gauge chart will be rendered */}
+    {/* <div className="">
+      <div id="gaugeArea"></div>
+    </div> */}
     <div className="flex items-center gap-4">
       <label className="w-20 text-white font-semibold">Rating:</label>
       <input
@@ -258,17 +314,17 @@ export function Evals() {
         max="5"
         step="1"
         className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter rating"
+        placeholder="60%"
       />
     </div>
-
+    
     {/* Review Field */}
     <div className="flex items-center gap-4">
       <label className="w-20 text-white font-semibold">Review:</label>
       <textarea
         className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
         rows={4}
-        placeholder="Enter review"
+        placeholder="Although the washroom has good amenities, the cleanliness requires improvement due to litter on the floor, an empty paper towel dispenser, and waste build-up on the countertop."
       ></textarea>
     </div>
 
@@ -278,7 +334,7 @@ export function Evals() {
       <input
         type="text"
         className="flex-1 py-2 px-4 bg-gray-900 text-white border border-gray-700 rounded-md focus:outline-none focus:border-blue-500"
-        placeholder="Enter amenities"
+        placeholder="Well-equipped with hands-free soap dispensers and adequate basins."
       />
     </div>
   </div>
